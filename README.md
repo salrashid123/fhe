@@ -12,7 +12,9 @@ This sample uses `C#` Microsoft SEAL Library to perform the distance calculation
 6. Each driver encrypts their respective location `x2`,`y2` using `pk`  -> `x2'`,`y2'`
 7. Each driver each sends `x2'`, `y2'` to the server
 8. Server calculates over the still encrypted data the distance from the rider to each driver
+
    `(x2'-x1')^2  + (y2'-y1')^2`  
+
 9. Server sends the encrypted result back to the rider
 10. Rider decrypts distance from each driver using the sk  
 11. Rider picks the closest driver
