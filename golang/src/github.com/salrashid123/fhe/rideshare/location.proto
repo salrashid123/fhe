@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option go_package = "github.com/salrashid123/fhe/rideshare";
+
+package location;
+
+message EncryptedCoordinate {
+  string id = 1;
+  bytes x = 2;
+  bytes y = 3;
+  bytes pk = 4;  
+}
+
+message Distance {
+  string rid = 1;
+  string did = 2;  
+  bytes dist = 3;
+}
+
+message DecryptedCoordinate {
+  string id = 1;
+  uint64 x = 2;
+  uint64 y = 3;  
+}

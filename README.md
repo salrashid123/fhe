@@ -2,7 +2,7 @@
 
 Just a simple C# application that calculates the closest driver to a rider using Homomorphic Encryption.
 
-This sample uses `C#` Microsoft SEAL Library to perform the distance calculation under encryption:
+This sample uses both `C#` Microsoft SEAL Library and Golang `lattigo` to perform the distance calculation under encryption:
 
 1. On startup a Rider is assigned a random `(x1, y1)` coordinate in a `1000x1000` grid
 2. Rider generates homomorphic publickey, secretkey:  `pk`, `sk`
@@ -20,6 +20,8 @@ This sample uses `C#` Microsoft SEAL Library to perform the distance calculation
 11. Rider picks the closest driver
 
 The thing to note is the calculation done in step 8 is done using _encrypted data_....the server never decrypts any of the data its provided but nonetheless, it can calculate the distance value.
+
+### C#
 
 ### Build and run
 
@@ -77,6 +79,62 @@ Driver at (389,597)
 Cloest = 4357
 
 ```
+
+## Golang
+
+The go program by itself does not run in a loop but rather individually processes each step as a command line.  It's trivial to change this to iterate all 50 within a loop automatically as in the C# sample but i just left it as a "standalone" command set.
+
+### Standalone
+
+The following runs each step as a standalone command set which is later wrapped into the `runner.sh` and iterate over 50 drivers:
+```bash
+## Create rider public,secret key
+go run main.go -mode=genkey --pkFile=/tmp/rider/pk.bin --skFile=/tmp/rider/sk.bin
+
+## Then test encryption/decryption for a rider at (x,y)=(2,2)
+go run main.go -mode=encrypt --pkFile=/tmp/rider/pk.bin --x=2 --y=2 --encryptedFile=/tmp/rider/rider.bin
+go run main.go -mode=decrypt --skFile=/tmp/rider/sk.bin --encryptedFile=/tmp/rider/rider.bin
+
+## Use the riders public key to encrypt a drivers location at (4,5)
+go run main.go -mode=encrypt --pkFile=/tmp/rider/pk.bin --x=4 --y=5 --encryptedFile=/tmp/drivers/1.bin
+
+## Derive the distance between the rider and driver given their _encrypted_ values
+go run main.go -mode=distance --riderEncryptedFile=/tmp/rider/rider.bin --driverEncryptedFile=/tmp/drivers/1.bin --encryptedFile=/tmp/distance/1.bin
+
+## Rider decrypts each drivers' location
+go run main.go -mode=decryptdistance --skFile=/tmp/rider/sk.bin --encryptedFile=/tmp/distance/1.bin
+```
+
+To run the above commands as a schell script,
+```bash
+ ./runner.sh 
+### RIder location and ID
+2020/08/16 17:17:52 Decrypted: id: f1da6487-e005-11ea-baf5-e86a641d5560, (323,95)
+
+## Driver location and ID
+Driver [1] at (821, 145)
+### Decrypted distance between driver and rider
+  2020/08/16 17:17:54 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f26cc4e7-e005-11ea-bc51-e86a641d5560]  (53893)
+Driver [2] at (679, 726)
+  2020/08/16 17:17:56 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f35334df-e005-11ea-b9be-e86a641d5560]  (601)  <<<<<
+Driver [3] at (412, 800)
+  2020/08/16 17:17:57 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f4517dc8-e005-11ea-add5-e86a641d5560]  (46187)
+Driver [4] at (180, 557)
+  2020/08/16 17:17:59 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f53bb22b-e005-11ea-8e35-e86a641d5560]  (37282)
+Driver [5] at (438, 703)
+  2020/08/16 17:18:00 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f629c73a-e005-11ea-8e46-e86a641d5560]  (55204)
+Driver [6] at (670, 888)
+  2020/08/16 17:18:02 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f711526b-e005-11ea-b47f-e86a641d5560]  (28351)
+Driver [7] at (724, 574)
+  2020/08/16 17:18:03 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f7e10d6c-e005-11ea-a901-e86a641d5560]  (62557)
+Driver [8] at (827, 107)
+  2020/08/16 17:18:05 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f8bde225-e005-11ea-b0b7-e86a641d5560]  (57549)
+Driver [9] at (718, 975)
+  2020/08/16 17:18:06 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [f99c6359-e005-11ea-b50c-e86a641d5560]  (12907)
+Driver [10] at (886, 514)
+  2020/08/16 17:18:08 Distance: from Rider [f1da6487-e005-11ea-baf5-e86a641d5560] --> Driver [faa55930-e005-11ea-8d91-e86a641d5560]  (33771)
+```
+
 
 ### References
 
