@@ -21,7 +21,6 @@ This sample uses both `C#` Microsoft SEAL Library and Golang `lattigo` to perfor
 
 The thing to note is the calculation done in step 8 is done using _encrypted data_....the server never decrypts any of the data its provided but nonetheless, it can calculate the distance value.
 
-
 This repository also has a simple Apache Beam piepeline runner which will homomorphically add a given number to an already encrypted input.  You can extend that sample to make further modifications and create a simple streaming ridesharing app.
 
 ### C#
