@@ -72,8 +72,8 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			s := fmt.Sprintf("%v %s", uid.ID(), base64.RawStdEncoding.EncodeToString(XcipherBytes))
-			_, err = io.WriteString(file, s+"\n")
+			s := fmt.Sprintf("%v %s\n", uid.ID(), base64.RawStdEncoding.EncodeToString(XcipherBytes))
+			_, err = io.WriteString(file, s)
 			if err != nil {
 				panic(err)
 			}

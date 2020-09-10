@@ -13,7 +13,7 @@ import (
 
 	"github.com/apache/beam/sdks/go/pkg/beam"
 
-	// "github.com/apache/beam/sdks/go/pkg/beam/io/textio"
+	//"github.com/apache/beam/sdks/go/pkg/beam/io/textio"
 	"github.com/apache/beam/sdks/go/pkg/beam/x/beamx"
 	"github.com/ldsec/lattigo/bfv"
 )
@@ -35,8 +35,9 @@ var (
 )
 
 func extractFn(ctx context.Context, line string, emit func(string, string)) {
+
 	kv := strings.Split(line, " ")
-	if len(kv) == 0 {
+	if len(kv) != 2 {
 		return
 	}
 	x := bfv.NewCiphertext(params, 1)
