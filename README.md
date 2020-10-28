@@ -6,17 +6,17 @@ This sample uses both `C#` Microsoft SEAL Library and Golang `lattigo` to perfor
 
 1. On startup a Rider is assigned a random `(x1, y1)` coordinate in a `1000x1000` grid
 2. Rider generates homomorphic publickey, secretkey:  `pk`, `sk`
-3. Rider encrypts the xy coordinates using `pk`:  `x1`->`x1'`, `y1`->`y1'`
-4. Rider sends encrypted `x1'`, `y1'`  and `pk` to server
-5. Server sends `pk` to 50 drivers each in a in random position in the grid
-6. Each driver encrypts their respective location `x2`,`y2` using `pk`  -> `x2'`,`y2'`
-7. Each driver each sends `x2'`, `y2'` to the server
+3. Rider encrypts the xy coordinates using `pk`:  (`x1`, `y1`) -> (`x1'`, `y1'`)
+4. Rider sends encrypted (`x1'`, `y1'`)  and `pk` to server
+5. Server sends `pk` to 50 drivers each in random positions in the grid.
+6. Each driver encrypts their respective location (`x2`,`y2`) using `pk`  -> (`x2'`,`y2'`)
+7. Each driver each sends (`x2'`, `y2'`) to the server
 8. Server calculates over the still encrypted data the distance from the rider to each driver
 
-   `(x2'-x1')^2  + (y2'-y1')^2`  
+   `d = (x2'-x1')^2  + (y2'-y1')^2`  
 
-9. Server sends the encrypted result back to the rider
-10. Rider decrypts distance from each driver using the sk  
+9. Server sends the encrypted result for each driver back to the rider
+10. Rider decrypts distance from each driver using the `sk` 
 11. Rider picks the closest driver
 
 The thing to note is the calculation done in step 8 is done using _encrypted data_....the server never decrypts any of the data its provided but nonetheless, it can calculate the distance value.
