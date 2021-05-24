@@ -6,11 +6,11 @@ This sample uses both `C#` Microsoft SEAL Library and Golang `lattigo` to perfor
 
 1. On startup a Rider is assigned a random `(x1, y1)` coordinate in a `1000x1000` grid
 2. Rider generates homomorphic publickey, secretkey:  `pk`, `sk`
-3. Rider encrypts the xy coordinates using `pk`:  (`x1`, `y1`) -> (`x1'`, `y1'`)
-4. Rider sends encrypted (`x1'`, `y1'`)  and `pk` to server
+3. Rider encrypts the xy coordinates using `pk`:  `pk(x1, y1)` -> `(x1', y1')`
+4. Rider sends encrypted `(x1', y1')`  and `pk` to server
 5. Server sends `pk` to 50 drivers each in random positions in the grid.
-6. Each driver encrypts their respective location (`x2`,`y2`) using `pk`  -> (`x2'`,`y2'`)
-7. Each driver each sends (`x2'`, `y2'`) to the server
+6. Each driver encrypts their respective location using `pk`: `pk(x2, y2)` -> `(x2', y2')`
+7. Each driver each sends `(x2', y2')` to the server
 8. Server calculates over the still encrypted data the distance from the rider to each driver
 
    `d = (x2'-x1')^2  + (y2'-y1')^2`  
@@ -21,7 +21,7 @@ This sample uses both `C#` Microsoft SEAL Library and Golang `lattigo` to perfor
 
 The thing to note is the calculation done in step 8 is done using _encrypted data_....the server never decrypts any of the data its provided but nonetheless, it can calculate the distance value.
 
-This repository also has a simple Apache Beam piepeline runner which will homomorphically add a given number to an already encrypted input.  You can extend that sample to make further modifications and create a simple streaming ridesharing app.
+This repository also has a simple Apache Beam pipeline runner which will homomorphically add a given number to an already encrypted input.  You can extend that sample to make further modifications and create a simple streaming ridesharing app.
 
 ### C#
 
