@@ -32,9 +32,9 @@ Use docker to build SEAL, compile the sample application and run:
 The app will iterate over 50 random points, encrypt them and allow the Rider to decrypt the distance value:
 
 ```bash
-docker build -t htest .
+docker build -t salrashid123/fhe .
 
-docker run -t htest
+docker run -t salrashid123/fhe
 
 Rider at (281,399)
 
